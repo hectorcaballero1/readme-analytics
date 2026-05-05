@@ -71,13 +71,13 @@ SQL_CATEGORIAS_VISTA = "SELECT * FROM readme_db.vista_categorias_demanda"
 
 
 def _athena_client():
-    return boto3.client(
-        "athena",
-        aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-        aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+    session = boto3.Session(
+        aws_access_key_id=settings.AWS_ACCESS_KEY_ID or None,
+        aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY or None,
         aws_session_token=settings.AWS_SESSION_TOKEN or None,
         region_name=settings.AWS_REGION,
     )
+    return session.client("athena")
 
 
 def _poll(client, execution_id: str) -> None:
